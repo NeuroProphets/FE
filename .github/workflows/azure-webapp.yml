@@ -3,31 +3,43 @@ name: Deploy Frontend to Azure WebApp
 on:
   push:
     branches:
-      - main
+      - main   # change if you deploy from another branch
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
+      # Step 1: Checkout repo
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      # Step 2: Setup Node.js
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '22'
+          node-version: '22'   # 👈 use 18 or 20 (Azure supports). Avoid 22 for now.
           cache: 'npm'
 
+      # Step 3: Install dependencies
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
+      # Step 4: Build Next.js app
       - name: Build project
         run: npm run build
 
+      # Step 5: Prepare artifact for deployment
+      # (copies only what is needed: build output, node_modules, package.json, etc.)
+      - name: Archive production files
+        run: |
+          mkdir build
+          cp -r .next node_modules public package*.json next.config.* build/
+      
+      # Step 6: Deploy to Azure
       - name: Deploy to Azure WebApp
         uses: azure/webapps-deploy@v2
         with:
           app-name: NP-FE
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-          package: .
+          package: build
