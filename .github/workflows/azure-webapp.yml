@@ -16,22 +16,23 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '22'   # 👈 staying on Node 22
+          node-version: '22'
           cache: 'npm'
 
       - name: Install dependencies
         run: npm ci
 
+      # 👇 Build Next.js app with API URL injected
       - name: Build Next.js app
         run: npm run build
+        env:
+          NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
 
-      # Copy everything needed for runtime into /build
       - name: Prepare build artifacts
         run: |
           mkdir build
           cp -r .next node_modules public package*.json next.config.* build/ || true
 
-      # Prevent Azure from rebuilding (forces it to just run our bundle)
       - name: Disable Oryx build
         run: |
           echo '[config]' > build/.deployment
