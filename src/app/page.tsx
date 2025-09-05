@@ -125,7 +125,7 @@ export default function MovieRecommender() {
         {/* Header */}
         <div className="text-center mb-12">
           <h1 className="text-5xl font-bold text-white mb-4 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-400">
-            🎬 CinemaAI
+            🎬 Movie AI
           </h1>
           <p className="text-xl text-gray-300">Discover your next favorite movie with AI-powered recommendations</p>
         </div>
