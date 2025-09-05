@@ -36,7 +36,7 @@ interface ApiResponse {
   total: number;
 }
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://74.225.249.37:8000";
 
 export default function MovieRecommender() {
   const [movies, setMovies] = useState<Movie[]>([]);
